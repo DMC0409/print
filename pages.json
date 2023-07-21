@@ -1,0 +1,169 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"name": "index",
+			"style": {
+				"navigationBarBackgroundColor": "transparent",
+				"app-plus": {
+					"titleNView": {
+						"type": "float",
+						"titleText": "启鹿云3.0"
+					}
+				}
+			}
+		},
+		// 登陆页面
+		{
+			"path": "pages/login/index",
+			"name": "login",
+			"style": {
+				"navigationBarTextStyle": "black",
+				"navigationBarBackgroundColor": "transparent",
+				"backgroundColor": "#000",
+				"app-plus": {
+					"titleNView": {
+						"type": "float",
+						"titleText": "欢迎使用"
+					}
+				}
+			}
+		},
+		// 重置密码页面
+		{
+			"path": "pages/setpwd/index",
+			"name": "setpwd",
+			"style": {
+				"navigationBarTextStyle": "black",
+				"navigationBarBackgroundColor": "transparent",
+				"backgroundColor": "#000",
+				"app-plus": {
+					"titleNView": {
+						"type": "float",
+						"titleText": "重置密码"
+					}
+				}
+			}
+		},
+		// 创建订单页面
+		{
+			"path": "pages/print/index",
+			"name": "print",
+			"style": {
+				"navigationBarTextStyle": "black",
+				"navigationBarBackgroundColor": "transparent",
+				"backgroundColor": "#000",
+				"app-plus": {
+					"titleNView": {
+						"type": "float",
+						"titleText": "创建订单"
+					}
+				}
+			}
+		},
+		// 选择用户
+		{
+			"path": "pages/seluser/index",
+			"name": "seluser",
+			"style": {
+				"navigationBarTextStyle": "black",
+				"navigationBarBackgroundColor": "transparent",
+				"backgroundColor": "#000",
+				"app-plus": {
+					"titleNView": {
+						"type": "float",
+						"titleText": "选择用户"
+					}
+				}
+			}
+		},
+		// 选择加工类型
+		{
+			"path": "pages/seltype/index",
+			"name": "seltype",
+			"style": {
+				"navigationBarTextStyle": "black",
+				"navigationBarBackgroundColor": "transparent",
+				"backgroundColor": "#000",
+				"app-plus": {
+					"titleNView": {
+						"type": "float",
+						"titleText": "选择加工类型"
+					}
+				}
+			}
+		},
+		// 按时间筛选
+		{
+			"path": "pages/unfinish/index",
+			"name": "unfinish",
+			"style": {
+				"navigationBarTextStyle": "black",
+				"navigationBarBackgroundColor": "transparent",
+				"backgroundColor": "#000",
+				"enablePullDownRefresh": true,
+				"app-plus": {
+					"titleNView": {
+						"type": "float",
+						"titleText": "历史记录"
+					}
+				}
+			}
+		},
+		// 公司订单
+		{
+			"path": "pages/order/index",
+			"name": "order",
+			"style": {
+				"navigationBarTextStyle": "black",
+				"navigationBarBackgroundColor": "transparent",
+				"backgroundColor": "#000",
+				"app-plus": {
+					"titleNView": {
+						"type": "float",
+						"titleText": ""
+					}
+				}
+			}
+		},
+		// 历史记录
+		{
+			"path": "pages/history/index",
+			"name": "history",
+			"style": {
+				"navigationBarTextStyle": "black",
+				"navigationBarBackgroundColor": "transparent",
+				"backgroundColor": "#000",
+				"app-plus": {
+					"titleNView": {
+						"type": "float",
+						"titleText": "历史记录"
+					}
+				}
+			}
+		},
+		// 调试页面
+		{
+			"path": "pages/adjust/index",
+			"name": "adjust",
+			"style": {
+				// "navigationBarTextStyle": "black",
+				// "navigationBarBackgroundColor": "transparent",
+				// "backgroundColor": "#000",
+				"app-plus": {
+					"titleNView": {
+						// "type": "float",
+						"titleText": "调试页面"
+					}
+				}
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"backgroundColor": "#F8F8F8"
+		// "navigationStyle": "custom"
+	},
+	"uniIdRouter": {}
+}

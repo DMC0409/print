@@ -1,0 +1,121 @@
+{
+  "id": "3997601",
+  "name": "package_line",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "410628",
+      "name": "更新",
+      "font_class": "gengxin",
+      "unicode": "e668",
+      "unicode_decimal": 58984
+    },
+    {
+      "icon_id": "2076371",
+      "name": " 历史小2",
+      "font_class": "lishixiao",
+      "unicode": "e8bd",
+      "unicode_decimal": 59581
+    },
+    {
+      "icon_id": "3456457",
+      "name": "设置",
+      "font_class": "shezhi",
+      "unicode": "e70f",
+      "unicode_decimal": 59151
+    },
+    {
+      "icon_id": "5769243",
+      "name": "工单",
+      "font_class": "gongdan",
+      "unicode": "ec37",
+      "unicode_decimal": 60471
+    },
+    {
+      "icon_id": "685441",
+      "name": "电话",
+      "font_class": "dianhua",
+      "unicode": "e797",
+      "unicode_decimal": 59287
+    },
+    {
+      "icon_id": "6866619",
+      "name": "人员保障",
+      "font_class": "renyuanbaozhang",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "851467",
+      "name": "loading",
+      "font_class": "loading",
+      "unicode": "e6a6",
+      "unicode_decimal": 59046
+    },
+    {
+      "icon_id": "11372757",
+      "name": "成功",
+      "font_class": "chenggong",
+      "unicode": "e8c3",
+      "unicode_decimal": 59587
+    },
+    {
+      "icon_id": "11372770",
+      "name": "失败",
+      "font_class": "shibai",
+      "unicode": "e8c5",
+      "unicode_decimal": 59589
+    },
+    {
+      "icon_id": "603298",
+      "name": "向上-排序",
+      "font_class": "xiangshangpaixu-copy",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "2966928",
+      "name": "符号-@",
+      "font_class": "fuhao-",
+      "unicode": "e704",
+      "unicode_decimal": 59140
+    },
+    {
+      "icon_id": "6149283",
+      "name": "回车",
+      "font_class": "huiche",
+      "unicode": "e651",
+      "unicode_decimal": 58961
+    },
+    {
+      "icon_id": "9512492",
+      "name": "退格",
+      "font_class": "backspace",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
+      "icon_id": "12592157",
+      "name": "ABC",
+      "font_class": "ABC",
+      "unicode": "e6e7",
+      "unicode_decimal": 59111
+    },
+    {
+      "icon_id": "16322878",
+      "name": "向上",
+      "font_class": "xiangshang",
+      "unicode": "e6f9",
+      "unicode_decimal": 59129
+    },
+    {
+      "icon_id": "27402380",
+      "name": "数字",
+      "font_class": "shuzi",
+      "unicode": "ee18",
+      "unicode_decimal": 60952
+    }
+  ]
+}
