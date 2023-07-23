@@ -10,8 +10,8 @@
 				</view>
 			</view>
 			<view class="userList">
-				<view class="eachUser flex align-center justify-between" @click="selUser(item)" v-for="item in userList"
-					:key="item.info_userout_company_id">
+				<view class="eachUser flex align-center justify-between" @click="selUser(item,index)"
+					v-for="(item,index) in userList" :key="item.info_userout_company_id">
 					{{item.short_name}}
 					<i v-if="selectedID === item.info_userout_company_id" class="iconfont iconchenggong"></i>
 				</view>
@@ -36,8 +36,8 @@
 		mounted() {
 			this.userList = this.baseInfo.buyerList
 		},
-		watch:{
-			keyword(newVal,oldVal){
+		watch: {
+			keyword(newVal, oldVal) {
 				this.search()
 			}
 		},
@@ -54,7 +54,21 @@
 					}
 				}
 			},
-			selUser(item) {
+			selUser(item, index) {
+				// 删除选中项置顶
+				let deleteItem = this.baseInfo.buyerList.splice(index, 1)
+				// 可选企业数组前增加删除的元素
+				this.baseInfo.buyerList.unshift(deleteItem[0])
+				// 按升序重新排序企业数组
+				for (let i in this.baseInfo.buyerList) {
+					this.baseInfo.buyerList[i].sortNum = Number(i)
+				}
+				this.baseInfo.buyerList = this.baseInfo.buyerList.sort((a, b) => {
+					return a.sortNum - b.sortNum
+				})
+				// 更新缓存数据
+				uni.setStorageSync('baseInfo', this.baseInfo)
+				// 向上个页面传参
 				let pages = getCurrentPages();
 				let prevPage = pages[pages.length - 2];
 				prevPage.$vm.info_userout_company_id = item.info_userout_company_id;

@@ -51,8 +51,9 @@ const store = new Vuex.Store({
 			// 	message: ret,
 			// 	duration: 1.5
 			// });
+			let markEnable = uni.getStorageSync('paperType')
 			printer.printEnableMark({
-				enable: true
+				enable: markEnable == 0 ? true : false
 			});
 			printer.setConcentration({ //设置打印浓度。font_level 取值范围：1~39。
 				level: 39

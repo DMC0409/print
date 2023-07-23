@@ -15,7 +15,7 @@
 			</scroll-view>
 			<view class="content" v-if="showType.length!=0">
 				<block v-if="showType[current].child.length!=0">
-					<view class="eachLine flex align-center justify-between" @click="selWay(item)"
+					<view class="eachLine flex align-center justify-between" @click="selWay(item,index)"
 						v-for="(item,index) in showType[current].child" :key="index">
 						{{item.type_name}}
 						<i v-if="srcTypeId === item.src_material_type_id" class="iconfont iconchenggong"></i>
@@ -53,29 +53,15 @@
 			}
 		},
 		mounted() {
-			this.contentArr = []
-			let stepArr = []
-			// 构建可选子菜单数组对象结构
-			for (let i of this.baseInfo.typeList) {
-				if (i.main_src_material_type_id == '0') {
-					stepArr.push(i)
-					let obj = i
-					obj.child = []
-					this.contentArr.push(i)
+			this.contentArr = this.baseInfo.typeList
+			// 构建可选工序父级菜单
+			for (let i in this.contentArr) {
+				if (this.contentArr[i].main_src_material_type_id == '0') {
+					this.wayArr.push(this.contentArr[i].type_name)
 				}
-			}
-			// 排序父菜单顺序
-			stepArr = stepArr.sort((a, b) => {
-				return a.type_number - b.type_number
-			})
-			for (let i of stepArr) {
-				this.wayArr.push(i.type_name)
-			}
-			// 匹配可选子菜单数组对象数据
-			for (let i of this.baseInfo.typeList) {
-				for (let j of this.contentArr) {
-					if (i.main_src_material_type_id == j.src_material_type_id) {
-						j.child.push(i)
+				for (let j of this.contentArr[i].child) {
+					if (j.src_material_type_id == this.srcTypeId) {
+						this.current = Number(i)
 					}
 				}
 			}
@@ -100,7 +86,20 @@
 					this.current = e.currentIndex;
 				}
 			},
-			selWay(item) {
+			selWay(item, index) {
+				// 删除选中项置顶
+				let deleteItem = this.baseInfo.typeList[this.current].child.splice(index, 1)
+				// 可选企业数组前增加删除的元素
+				this.baseInfo.typeList[this.current].child.unshift(deleteItem[0])
+				// 按升序重新排序企业数组
+				for (let i in this.baseInfo.typeList[this.current].child) {
+					this.baseInfo.typeList[this.current].child[i].sortNum = Number(i)
+				}
+				this.baseInfo.typeList[this.current].child = this.baseInfo.typeList[this.current].child.sort((a, b) => {
+					return a.sortNum - b.sortNum
+				})
+				// 更新缓存数据
+				uni.setStorageSync('baseInfo', this.baseInfo)
 				let pages = getCurrentPages();
 				let prevPage = pages[pages.length - 2];
 				prevPage.$vm.src_material_type_id = item.src_material_type_id;

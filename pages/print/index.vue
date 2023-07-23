@@ -20,7 +20,7 @@
 				<view class="bd flex align-center justify-between">
 					{{info_userout_company_id==''?'未选择':judgeUser()}}
 					<view class="toSel" @click="jumpToSel">
-						立即选择
+						选择
 					</view>
 				</view>
 			</view>
@@ -42,7 +42,7 @@
 				<view class="bd flex align-center justify-between" v-if="item.head_style == '27'">
 					{{src_material_type_id=='0'?'未选择':judgeWay()}}
 					<view class="toSel" @click="jumpToWay">
-						立即选择
+						选择
 					</view>
 				</view>
 				<!-- 显示虚拟键盘 -->
@@ -274,8 +274,10 @@
 			},
 			judgeWay() {
 				for (let i of this.baseInfo.typeList) {
-					if (i.src_material_type_id === this.src_material_type_id) {
-						return i.type_name
+					for (let j of i.child) {
+						if (j.src_material_type_id === this.src_material_type_id) {
+							return j.type_name
+						}
 					}
 				}
 			},
@@ -455,26 +457,7 @@
 						})
 						if (!state) {
 							// 读取打印数据进行打印
-							// this.$Utils.doPrintFun(res.data.data.printInfo)
-							this.$Utils.doPrintFun([{
-								printContent: [{
-									type: 'text',
-									fontSize: 3,
-									content: '第一页内容',
-									offset: 2,
-									isBold: false,
-									isUnderLine: false
-								}, {
-									type: 'mark'
-								}, {
-									type: 'text',
-									fontSize: 5,
-									content: '第二页内容',
-									offset: 2,
-									isBold: false,
-									isUnderLine: false
-								}]
-							}])
+							this.$Utils.doPrintFun(res.data.data.printInfo)
 						} else {
 							this.UPDATE_TIPMODAL({
 								isShow: true,
@@ -523,7 +506,7 @@
 					color: #8b8c90;
 
 					.toSel {
-						width: 38%;
+						width: 20%;
 						padding: 10rpx 20rpx;
 						font-size: 16px;
 						font-weight: bold;

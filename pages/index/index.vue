@@ -52,6 +52,9 @@
 				<view class="eachOper" @click="toConsoleLog">
 					{{adjustSwitch?'关闭调试':'开启调试'}}
 				</view>
+				<!-- <view class="eachOper" @click="selPaper">
+					选择纸张类型
+				</view> -->
 				<view class="eachOper" @click="cancel">
 					取消
 				</view>
@@ -93,7 +96,6 @@
 				loginUserInfo: uni.getStorageSync('loginUserInfo'),
 				loginSystemInfo: uni.getStorageSync('loginSystemInfo'),
 				otherVisible: true,
-				baseInfo: uni.getStorageSync('baseInfo'),
 				appVersion: ''
 			}
 		},
@@ -104,10 +106,14 @@
 				this.appVersion = wgtinfo.version;
 			})
 			// #endif
+			// 初始化纸张类型
+			if (!uni.getStorageSync('paperType')) {
+				uni.setStorageSync('paperType', 0)
+			}
 		},
 		mounted() {
-			if (this.baseInfo == '') {
-				this.updateInfo()
+			if (!uni.getStorageSync('baseInfo')) {
+				this.updateInfo(true)
 			}
 			this.checkVersion()
 		},
@@ -205,7 +211,7 @@
 				}
 				this.cancel()
 			},
-			updateInfo() {
+			updateInfo(status) {
 				this.$api({
 					url: '/api/data.php',
 					method: 'post',
@@ -217,7 +223,40 @@
 						loginsession_main: this.userInfo.logincodewx,
 					}
 				}).then(res => {
-					if (this.baseInfo != '') {
+					let deaUser = []
+					// 获得可选用户信息，添加用户排序下标
+					for (let i in res.data.data.buyerList) {
+						res.data.data.buyerList[i].sortNum = Number(i)
+						deaUser.push(res.data.data.buyerList[i])
+					}
+					res.data.data.buyerList = deaUser
+					// 构建可选加工类型子菜单数组对象结构
+					let contentArr = []
+					for (let i of res.data.data.typeList) {
+						if (i.main_src_material_type_id == '0') {
+							let obj = i
+							obj.child = []
+							contentArr.push(i)
+						}
+					}
+					// 匹配可选子菜单数组对象数据
+					for (let i of res.data.data.typeList) {
+						for (let j of contentArr) {
+							if (i.main_src_material_type_id == j.src_material_type_id) {
+								j.child.push(i)
+							}
+						}
+					}
+					// 添加排序下标
+					for (let i of contentArr) {
+						for (let j in i.child) {
+							i.child[j].sortNum = Number(j)
+						}
+					}
+					res.data.data.typeList = contentArr
+					uni.setStorageSync('baseInfo', res.data.data)
+					if (!status) {
+						// 主动更新
 						this.UPDATE_TIPMODAL({
 							isShow: true,
 							tipText: '更新成功', // 提示信息
@@ -227,10 +266,15 @@
 							mode: 'self' // 弹窗模式
 						})
 					}
-					this.baseInfo = res.data.data
-					uni.setStorageSync('baseInfo', this.baseInfo)
 					this.cancel()
 				}, () => {})
+			},
+			selPaper() {
+				// 跳转至纸张选择页
+				uni.navigateTo({
+					url: '../selPaper/index'
+				})
+				this.cancel()
 			},
 			cancel() {
 				this.$refs.popup.close()

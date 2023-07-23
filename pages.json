@@ -93,6 +93,22 @@
 				}
 			}
 		},
+		// 选择加工类型
+		{
+			"path": "pages/selPaper/index",
+			"name": "selPaper",
+			"style": {
+				"navigationBarTextStyle": "black",
+				"navigationBarBackgroundColor": "transparent",
+				"backgroundColor": "#000",
+				"app-plus": {
+					"titleNView": {
+						"type": "float",
+						"titleText": "选择纸张类型"
+					}
+				}
+			}
+		},
 		// 按时间筛选
 		{
 			"path": "pages/unfinish/index",

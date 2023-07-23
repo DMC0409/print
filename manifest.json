@@ -2,8 +2,8 @@
     "name" : "手持终端机",
     "appid" : "__UNI__A0FEEB1",
     "description" : "",
-    "versionName" : "3.1.5",
-    "versionCode" : 315,
+    "versionName" : "3.1.6",
+    "versionCode" : 316,
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {

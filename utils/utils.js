@@ -40,7 +40,7 @@ export default {
 					store._actions['printQR2'][0]({
 						height: j.qrSize,
 						text: j.content,
-						offset: offset
+						offset: j.offset
 					})
 				} else if (j.type == 'bar' && j.content != '0') {
 					store._actions['printBarcode'][0]({
