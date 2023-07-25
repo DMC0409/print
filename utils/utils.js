@@ -33,14 +33,15 @@ export default {
 						offset: offset,
 						isBold: false,
 						isUnderLine: false,
-						fontsize: j.fontSize,
+						// fontsize: j.fontSize,
+						fontsize: 4,
 					})
 					store._actions['printLine'][0](1)
 				} else if (j.type == 'qr') {
 					store._actions['printQR2'][0]({
 						height: j.qrSize,
 						text: j.content,
-						offset: j.offset
+						offset: offset
 					})
 				} else if (j.type == 'bar' && j.content != '0') {
 					store._actions['printBarcode'][0]({

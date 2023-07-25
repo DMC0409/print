@@ -211,11 +211,19 @@
 						// 需回显值赋值
 						for (let j in res.data.data.dataInfo[0]) {
 							if (j == 'th_' + i.config_table_head_id) {
-								i.default_value = res.data.data.dataInfo[0][j]
+								if (i.head_style == '0' && (i.head_input_set == '20' || i.head_input_set ==
+										'21')) {
+									// 该判断内字段将使用picker组件，匹配正确的default_value值
+									for (let z in i.head_input_setjson) {
+										if (i.head_input_setjson[z].value == res.data.data.dataInfo[0][j]) {
+											i.default_value = z
+										}
+									}
+								} else {
+									i.default_value = res.data.data.dataInfo[0][j]
+								}
 							}
 						}
-					}
-					for (let i of res.data.data.tableHeadList) {
 						// 若可选项的default_value==‘-’则将其改为0
 						if (i.head_style == '0' && (i.head_input_set == '20' || i.head_input_set == '21')) {
 							if (i.default_value == '-') {
@@ -341,8 +349,10 @@
 						mode: 'self' // 弹窗模式
 					})
 				}
+
 				for (let i in this.formList) {
 					if (this.formList[i].default_value == '') {
+						// 用户未填写数据则添加默认值
 						if (this.formList[i].head_style == '0' && (this.formList[i].head_input_set == '1' || this.formList[
 								i].head_input_set == '2')) {
 							if (this.formList[i].head_input_save == '1' || this.formList[i].head_input_save == '2') {
@@ -356,6 +366,11 @@
 					} else {
 						if (this.formList[i].head_style == '27') {
 							list['th_' + this.formList[i].config_table_head_id] = this.src_material_type_id
+						} else if (this.formList[i].head_style == '0' && (this.formList[i].head_input_set == '20' || this
+								.formList[i].head_input_set == '21')) {
+							// 可选字段需配置head_input_setjson中对象的value值传给后端
+							list['th_' + this.formList[i].config_table_head_id] = this.formList[i].head_input_setjson[this
+								.formList[i].default_value].value
 						} else {
 							list['th_' + this.formList[i].config_table_head_id] = this.formList[i].default_value
 						}
@@ -437,11 +452,22 @@
 							// 需回显值赋值
 							for (let j in res.data.data.dataInfo[0]) {
 								if (j == 'th_' + i.config_table_head_id) {
-									i.default_value = res.data.data.dataInfo[0][j]
+									if (i.head_style == '0' && (i.head_input_set == '20' || i
+											.head_input_set ==
+											'21')) {
+										// 该判断内字段将使用picker组件，匹配正确的default_value值
+										for (let z in i.head_input_setjson) {
+											if (i.head_input_setjson[z].value == res.data.data.dataInfo[0][
+													j
+												]) {
+												i.default_value = z
+											}
+										}
+									} else {
+										i.default_value = res.data.data.dataInfo[0][j]
+									}
 								}
 							}
-						}
-						for (let i of res.data.data.tableHeadList) {
 							// 若可选项的default_value==‘-’则将其改为0
 							if (i.head_style == '0' && (i.head_input_set == '20' || i.head_input_set ==
 									'21')) {
