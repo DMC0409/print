@@ -52,7 +52,6 @@
 			}
 		},
 		onPullDownRefresh() {
-			console.log('refresh');
 			this.getTimeList('refresh')
 		},
 		methods: {

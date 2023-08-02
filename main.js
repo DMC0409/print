@@ -19,6 +19,8 @@ import adjust from '@/components/ball/ball.vue'
 import utils from './utils/utils.js'
 // 引入表单工具js
 import tableUtils from './utils/index.js'
+// 引入送货单工具js
+import devliveryUtils from './utils/formMainHelp.js'
 import moment from 'moment'; //导入模块
 moment.locale('zh-cn'); //设置语言 或 moment.lang('zh-cn'); 
 
@@ -26,6 +28,7 @@ Vue.prototype.$moment = moment; //赋值使用
 Vue.prototype.$api = myRequest
 Vue.prototype.$Utils = utils
 Vue.prototype.$tableUtils = tableUtils
+Vue.prototype.$devliveryUtils = devliveryUtils
 Vue.component('tip-modal', tipModal)
 Vue.component('adjust', adjust)
 try {

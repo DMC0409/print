@@ -93,7 +93,7 @@
 				}
 			}
 		},
-		// 选择加工类型
+		// 设置纸张类型
 		{
 			"path": "pages/selPaper/index",
 			"name": "selPaper",
@@ -104,7 +104,7 @@
 				"app-plus": {
 					"titleNView": {
 						"type": "float",
-						"titleText": "选择纸张类型"
+						"titleText": "设置纸张类型"
 					}
 				}
 			}
@@ -154,6 +154,54 @@
 					"titleNView": {
 						"type": "float",
 						"titleText": "历史记录"
+					}
+				}
+			}
+		},
+		// 送货单打印
+		{
+			"path": "pages/delivery/index",
+			"name": "delivery",
+			"style": {
+				"navigationBarTextStyle": "black",
+				"navigationBarBackgroundColor": "transparent",
+				"backgroundColor": "#000",
+				"app-plus": {
+					"titleNView": {
+						"type": "float",
+						"titleText": ""
+					}
+				}
+			}
+		},
+		// 送货单详情
+		{
+			"path": "pages/deliveryDetail/index",
+			"name": "deliveryDetail",
+			"style": {
+				"navigationBarTextStyle": "black",
+				"navigationBarBackgroundColor": "transparent",
+				"backgroundColor": "#000",
+				"app-plus": {
+					"titleNView": {
+						"type": "float",
+						"titleText": ""
+					}
+				}
+			}
+		},
+		// 送货单列表
+		{
+			"path": "pages/deliveryList/index",
+			"name": "deliveryList",
+			"style": {
+				"navigationBarTextStyle": "black",
+				"navigationBarBackgroundColor": "transparent",
+				"backgroundColor": "#000",
+				"app-plus": {
+					"titleNView": {
+						"type": "float",
+						"titleText": "送货单列表"
 					}
 				}
 			}

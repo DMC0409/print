@@ -53,7 +53,7 @@
 					name: '手机',
 					defaultDesc: '您注册的手机号',
 					value: ''
-					// value: '13567490732'
+					// value: '13900000004'
 				}, {
 					name: '密码',
 					defaultDesc: '您的密码',

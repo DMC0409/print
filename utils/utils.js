@@ -1,4 +1,51 @@
 import store from '../store/index.js';
+
+// 进行具体打印
+function doPrintFun(printData) {
+	// 读取打印数据进行打印
+	printData.forEach((i) => {
+		i.printContent.forEach((j) => {
+			let offset = 1
+			if (j.textPosition) {
+				if (j.textPosition == 'center') {
+					offset = 2
+				} else if (j.textPosition == 'right') {
+					offset = 3
+				} else if (j.textPosition == 'left') {
+					offset = 1
+				}
+			}
+			if (j.type == 'blank') {
+				store._actions['printLine'][0](1)
+			} else if (j.type == 'text') {
+				store._actions['printText2'][0]({
+					content: j.content,
+					offset: offset,
+					isBold: false,
+					isUnderLine: false,
+					fontsize: j.fontSize,
+				})
+				store._actions['printLine'][0](1)
+			} else if (j.type == 'qr') {
+				store._actions['printQR2'][0]({
+					height: j.qrSize,
+					text: j.content,
+					offset: offset
+				})
+			} else if (j.type == 'bar' && j.content != '0') {
+				store._actions['printBarcode'][0]({
+					text: j.content,
+					height: 80,
+					barcodeType: 73
+				})
+			} else if (j.type == 'mark') {
+				store._actions['toNextMark'][0]()
+			}
+		})
+	})
+	// 开始打印
+	store._actions['printStart'][0]()
+}
 export default {
 	// 校验手机号
 	isValidPhone(str) {
@@ -10,52 +57,37 @@ export default {
 		const reg = /^[0-9a-zA-Z*]{6,8}$/
 		return reg.test(str)
 	},
-	// 进行具体打印
-	doPrintFun(printData) {
-		// 读取打印数据进行打印
-		printData.forEach((i) => {
-			i.printContent.forEach((j) => {
-				let offset = 1
-				if (j.textPosition) {
-					if (j.textPosition == 'center') {
-						offset = 2
-					} else if (j.textPosition == 'right') {
-						offset = 3
-					} else if (j.textPosition == 'left') {
-						offset = 1
-					}
+	// 暴露进行具体打印方法
+	doPrintFun,
+	// 打印送货单
+	printDelivery(sourceData) {
+		const printInfo = sourceData
+		let printData = [{
+			printContent: []
+		}]
+		// 组建标题
+		for (let i of printInfo.formTitle) {
+			printData[0].printContent.push(i)
+		}
+		// 组建中间内容
+		for (let i of printInfo.printContent) {
+			let markEnable = uni.getStorageSync('paperType')
+			if (markEnable == 0) {
+				// 不干胶有黑标检测
+				if (i.config.new_page) {
+					printData[0].printContent.push({
+						type: 'mark'
+					})
 				}
-				if (j.type == 'blank') {
-					store._actions['printLine'][0](1)
-				} else if (j.type == 'text') {
-					store._actions['printText2'][0]({
-						content: j.content,
-						offset: offset,
-						isBold: false,
-						isUnderLine: false,
-						// fontsize: j.fontSize,
-						fontsize: 4,
-					})
-					store._actions['printLine'][0](1)
-				} else if (j.type == 'qr') {
-					store._actions['printQR2'][0]({
-						height: j.qrSize,
-						text: j.content,
-						offset: offset
-					})
-				} else if (j.type == 'bar' && j.content != '0') {
-					store._actions['printBarcode'][0]({
-						text: j.content,
-						height: 80,
-						barcodeType: 73
-					})
-				} else if (j.type == 'mark') {
-					store._actions['toNextMark'][0]()
-				}
-			})
-		})
-		// 开始打印
-		store._actions['printStart'][0]()
+			}
+			printData[0].printContent = [...printData[0].printContent, ...i.content]
+
+		}
+		// 组建底部数据
+		for (let i of printInfo.formBottom) {
+			printData[0].printContent.push(i)
+		}
+		doPrintFun(printData)
 	},
 	// 判断打印机错误
 	judgePrintErr(num) {

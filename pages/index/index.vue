@@ -52,9 +52,9 @@
 				<view class="eachOper" @click="toConsoleLog">
 					{{adjustSwitch?'关闭调试':'开启调试'}}
 				</view>
-				<!-- <view class="eachOper" @click="selPaper">
-					选择纸张类型
-				</view> -->
+				<view class="eachOper" @click="selPaper">
+					设置纸张类型
+				</view>
 				<view class="eachOper" @click="cancel">
 					取消
 				</view>
@@ -81,6 +81,16 @@
 					icon: "iconlishixiao",
 					Ename: 'History',
 					fun: this.toHistory
+				}, {
+					name: '打印送货单',
+					icon: "iconsonghuo",
+					Ename: 'Delivery',
+					fun: this.toDelivery
+				}, {
+					name: '送货单记录',
+					icon: "iconjilu",
+					Ename: 'Record',
+					fun: this.toDeliveryHistory
 				}, {
 					name: '更新信息',
 					icon: "icongengxin",
@@ -110,6 +120,14 @@
 			if (!uni.getStorageSync('paperType')) {
 				uni.setStorageSync('paperType', 0)
 			}
+			// 初始化延时时间
+			if (!uni.getStorageSync('delayTime')) {
+				uni.setStorageSync('delayTime', 15000)
+			}
+			// 初始化打印单据条数
+			if (!uni.getStorageSync('eachPage')) {
+				uni.setStorageSync('eachPage', 4)
+			}
 		},
 		mounted() {
 			if (!uni.getStorageSync('baseInfo')) {
@@ -138,7 +156,7 @@
 							console.log(appData)
 							// 版本不同则进行更新
 							let url = res.data.data.downloadLink
-							if (res.data.data.versionNum > appData.version) {
+							if (res.data.data.versionNum != appData.version) {
 								// 下载更新文件
 								uni.downloadFile({
 									url,
@@ -195,6 +213,16 @@
 			toHistory() {
 				uni.navigateTo({
 					url: '../unfinish/index'
+				})
+			},
+			toDelivery() {
+				uni.navigateTo({
+					url: '../delivery/index'
+				})
+			},
+			toDeliveryHistory() {
+				uni.navigateTo({
+					url: '../deliveryList/index'
 				})
 			},
 			logOut() {

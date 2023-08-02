@@ -52,12 +52,24 @@
 				</view>
 				<view class="bd"
 					v-else-if="item.head_style == '0' && (item.head_input_set == '20' || item.head_input_set == '21')">
-					<picker @change="onchange($event,item)" mode='selector' :value="item.default_value"
-						:range="item.head_input_setjson" range-key="name">
-						<view class="uni-input">
-							{{item.head_input_setjson[item.default_value].label}}
+					<block v-if="item.head_input_setjson.length>3">
+						<picker @change="onchange($event,item)" mode='selector' :value="item.show_index"
+							:range="item.head_input_setjson" range-key="name">
+							<view class="uni-input">
+								{{item.head_input_setjson[item.show_index].label}}
+							</view>
+						</picker>
+						<!-- {{item.head_input_setjson}} -->
+					</block>
+					<block v-else>
+						<view class="flex align-center">
+							<view class="eachItem" :class="i.value==item.default_value?'check':''"
+								v-for="(i,index) in item.head_input_setjson" :key="index" @click="selectWay(item,i)">
+								<i class="iconfont iconchenggong" v-show="i.value==item.default_value"></i>
+								{{i.label}}
+							</view>
 						</view>
-					</picker>
+					</block>
 				</view>
 				<view class="bd"
 					v-else-if="item.head_style == '0' && (item.head_input_set == '1' || item.head_input_set == '2')">
@@ -211,23 +223,23 @@
 						// 需回显值赋值
 						for (let j in res.data.data.dataInfo[0]) {
 							if (j == 'th_' + i.config_table_head_id) {
+								i.default_value = res.data.data.dataInfo[0][j]
 								if (i.head_style == '0' && (i.head_input_set == '20' || i.head_input_set ==
 										'21')) {
-									// 该判断内字段将使用picker组件，匹配正确的default_value值
+									// 该判断内字段将使用picker组件，匹配正确的选中的下标值
 									for (let z in i.head_input_setjson) {
 										if (i.head_input_setjson[z].value == res.data.data.dataInfo[0][j]) {
-											i.default_value = z
+											i.show_index = z
 										}
 									}
-								} else {
-									i.default_value = res.data.data.dataInfo[0][j]
 								}
 							}
 						}
 						// 若可选项的default_value==‘-’则将其改为0
 						if (i.head_style == '0' && (i.head_input_set == '20' || i.head_input_set == '21')) {
 							if (i.default_value == '-') {
-								i.default_value = '0'
+								i.default_value = i.head_input_setjson[0].value
+								i.show_index = 0
 							}
 						}
 					}
@@ -236,10 +248,18 @@
 					// 新建模式
 					this.config_table_id = res.data.data.tableInfo.config_table_id
 					for (let i of res.data.data.headList) {
-						// 若可选项的default_value==‘-’则将其改为0
+						// 若可选项的default_value==‘-’则将其改为head_input_setjson数组中的第一个对象的value值
 						if (i.head_style == '0' && (i.head_input_set == '20' || i.head_input_set == '21')) {
 							if (i.default_value == '-') {
-								i.default_value = '0'
+								i.default_value = i.head_input_setjson[0].value
+								i.show_index = 0
+							} else {
+								// 该判断内字段将使用picker组件，匹配正确的选中的下标值
+								for (let z in i.head_input_setjson) {
+									if (i.head_input_setjson[z].value == i.default_value) {
+										i.show_index = z
+									}
+								}
 							}
 						}
 					}
@@ -266,12 +286,15 @@
 				})
 			},
 			onchange(e, item) {
-				item.default_value = e.target.value.toString()
+				item.show_index = e.target.value.toString()
 			},
 			focusFun(item) {
 				if (item.default_value == '-' || item.default_value == '0') {
 					item.default_value = ''
 				}
+			},
+			selectWay(item, i) {
+				item.default_value = i.value
 			},
 			judgeUser() {
 				for (let i of this.baseInfo.buyerList) {
@@ -369,8 +392,14 @@
 						} else if (this.formList[i].head_style == '0' && (this.formList[i].head_input_set == '20' || this
 								.formList[i].head_input_set == '21')) {
 							// 可选字段需配置head_input_setjson中对象的value值传给后端
-							list['th_' + this.formList[i].config_table_head_id] = this.formList[i].head_input_setjson[this
-								.formList[i].default_value].value
+							if (this.formList[i].head_input_setjson.length > 3) {
+								// picker
+								list['th_' + this.formList[i].config_table_head_id] = this.formList[i].head_input_setjson[
+									this.formList[i]
+									.show_index].value
+							} else {
+								list['th_' + this.formList[i].config_table_head_id] = this.formList[i].default_value
+							}
 						} else {
 							list['th_' + this.formList[i].config_table_head_id] = this.formList[i].default_value
 						}
@@ -452,6 +481,7 @@
 							// 需回显值赋值
 							for (let j in res.data.data.dataInfo[0]) {
 								if (j == 'th_' + i.config_table_head_id) {
+									i.default_value = res.data.data.dataInfo[0][j]
 									if (i.head_style == '0' && (i.head_input_set == '20' || i
 											.head_input_set ==
 											'21')) {
@@ -460,11 +490,9 @@
 											if (i.head_input_setjson[z].value == res.data.data.dataInfo[0][
 													j
 												]) {
-												i.default_value = z
+												i.show_index = z
 											}
 										}
-									} else {
-										i.default_value = res.data.data.dataInfo[0][j]
 									}
 								}
 							}
@@ -472,7 +500,8 @@
 							if (i.head_style == '0' && (i.head_input_set == '20' || i.head_input_set ==
 									'21')) {
 								if (i.default_value == '-') {
-									i.default_value = '0'
+									i.default_value = i.head_input_setjson[0].value
+									i.show_index = 0
 								}
 							}
 						}
@@ -541,6 +570,25 @@
 						box-shadow: 0 1rpx 6rpx rgba(114, 130, 138, 0.2);
 						color: #ffffff;
 						background-color: #39b54a;
+					}
+
+					.eachItem {
+						border-radius: 5px;
+						background-color: #ededed;
+						color: #000;
+						padding: 10rpx 30rpx;
+						margin-right: 10rpx;
+
+						i {
+							color: #fff;
+							margin-right: 10rpx;
+							font-size: 35rpx;
+						}
+					}
+
+					.check {
+						background-color: #39b54a;
+						color: #fff;
 					}
 				}
 			}

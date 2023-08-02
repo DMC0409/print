@@ -369,7 +369,7 @@
 					bottom: 0,
 					left: 0,
 					right: 0,
-					top: 0,
+					top: '-140rpx',
 					justifyContent: 'center',
 					alignItems: 'center'
 				}

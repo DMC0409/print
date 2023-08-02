@@ -20,10 +20,13 @@ export const myRequest = (options) => {
 		}
 		TIME = setTimeout(() => {
 			let baseURL = 'https://qly.info'
+			// let baseURL = 'http://116.62.192.66'
+			let delayTime = Number(uni.getStorageSync('delayTime'))
 			uni.request({
 				url: baseURL + options.url, //接口地址：前缀+方法中传入的地址
 				method: options.method || 'GET', //请求方法：传入的方法或者默认是“GET”
 				data: options.data || {}, //传递参数：传入的参数或者默认传递空集合
+				timeout: delayTime, // 超时时间
 				headers: {
 					'Content-Type ': 'text/html;charset=utf-8'
 				},
@@ -101,7 +104,7 @@ export const myRequest = (options) => {
 					// 提示接口访问失败
 					store._mutations['UPDATE_TIPMODAL'][0]({
 						isShow: true,
-						tipText: '服务器出错', // 提示信息
+						tipText: '请检查网络是否连接', // 提示信息
 						tipIcon: 'iconshibai', // 图标名称
 						mark: true, // 是否有蒙版
 						duration: 2000, // 持续时间
