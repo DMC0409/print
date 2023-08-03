@@ -31,6 +31,8 @@
 				</view>
 			</view>
 		</view>
+		<uni-pagination class="page" :show-icon="true" :total="total" :current="page" :pageSize="pageSize"
+			@change="updatePage($event)"></uni-pagination>
 	</view>
 </template>
 
@@ -43,7 +45,10 @@
 				loginSystemInfo: uni.getStorageSync('loginSystemInfo'),
 				linkBaseData: null,
 				orderList: [],
-				keyword: ''
+				keyword: '',
+				page: 1,
+				total: 0,
+				pageSize: 0
 			}
 		},
 		mounted() {
@@ -65,7 +70,12 @@
 				}, () => {})
 		},
 		methods: {
+			updatePage(e) {
+				this.page = e.current
+				this.getHistoryData()
+			},
 			getHistoryData() {
+				this.orderList = []
 				this.$api({
 						url: '/api/data.php',
 						method: 'post',
@@ -76,7 +86,9 @@
 							loginsession: this.loginUserInfo.logincodewx,
 							loginsession_main: this.userInfo.logincodewx,
 							config_form_table_id: this.linkBaseData.linkInfo.config_form_table_id,
-							pad_comm_keywords: this.keyword
+							pad_comm_keywords: this.keyword,
+							page_name: this.page,
+							setEveryPageNum: 20
 						}
 					})
 					.then((res) => {
@@ -86,7 +98,8 @@
 						// 处理分页数据
 						this.pageSize = res.data.data.dataInfo.list
 							.everyPageContentNum
-						this.total = Math.ceil(res.data.data.dataInfo.list.row / this.pageSize)
+						// 一共有多少条记录
+						this.total = res.data.data.dataInfo.list.row
 						const {
 							formHeadMainList
 						} = res.data.data
@@ -166,11 +179,20 @@
 			}
 		}
 
-		.orderOut {
-			width: 100vw;
-			height: 85vh;
+		.page {
+			width: 95%;
 			position: absolute;
 			bottom: 0;
+			left: 50%;
+			right: 50%;
+			transform: translate(-50%, -50%);
+		}
+
+		.orderOut {
+			width: 100vw;
+			height: 76vh;
+			position: absolute;
+			bottom: 8vh;
 			overflow: auto;
 
 			.eachOrder {
@@ -191,7 +213,8 @@
 					color: #000;
 					font-size: 38rpx;
 					border-bottom: 1px solid #ebeef5;
-					.company{
+
+					.company {
 						color: #666;
 					}
 				}

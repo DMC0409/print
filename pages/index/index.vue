@@ -53,7 +53,7 @@
 					{{adjustSwitch?'关闭调试':'开启调试'}}
 				</view>
 				<view class="eachOper" @click="selPaper">
-					设置纸张类型
+					设置
 				</view>
 				<view class="eachOper" @click="cancel">
 					取消
@@ -115,6 +115,17 @@
 			plus.runtime.getProperty(plus.runtime.appid, (wgtinfo) => {
 				this.appVersion = wgtinfo.version;
 			})
+			// // 安卓系统获取IMEI
+			// plus.device.getInfo({
+			// 	success: function(e) {
+			// 		// let clientid = e.aaid;
+			// 		// console.log(clientid);
+			// 		console.log(e);
+			// 	},
+			// 	fail: function(e) {
+			// 		console.log(e);
+			// 	}
+			// });
 			// #endif
 			// 初始化纸张类型
 			if (!uni.getStorageSync('paperType')) {
@@ -130,6 +141,11 @@
 			}
 		},
 		mounted() {
+			// uni.getSystemInfo({
+			// 	success: (res) => {
+			// 		console.log(res)
+			// 	}
+			// })
 			if (!uni.getStorageSync('baseInfo')) {
 				this.updateInfo(true)
 			}
@@ -252,7 +268,7 @@
 					}
 				}).then(res => {
 					let deaUser = []
-					// 获得可选用户信息，添加用户排序下标
+					// 获得可选企业信息，添加企业排序下标
 					for (let i in res.data.data.buyerList) {
 						res.data.data.buyerList[i].sortNum = Number(i)
 						deaUser.push(res.data.data.buyerList[i])
@@ -282,6 +298,14 @@
 						}
 					}
 					res.data.data.typeList = contentArr
+					
+					// 获得可选设备信息，添加设备排序下标
+					let devUser = []
+					for (let i in res.data.data.equipmentList) {
+						res.data.data.equipmentList[i].sortNum = Number(i)
+						devUser.push(res.data.data.equipmentList[i])
+					}
+					res.data.data.equipmentList = devUser
 					uni.setStorageSync('baseInfo', res.data.data)
 					if (!status) {
 						// 主动更新

@@ -389,9 +389,9 @@
 				width: 90%;
 				margin: 0 auto 30rpx auto;
 				background: rgba(250, 250, 250, 0.9);
-				box-shadow: 0 0.4rem 0.4rem rgba(11, 48, 107, .1);
+				box-shadow: rgba(0, 0, 0, 0.08) 0px 0px 3px 1px;
 				border-radius: 5px;
-				border: 1px dashed #747474;
+				// border: 1px dashed #747474;
 
 				view {
 					padding: 5rpx 30rpx;

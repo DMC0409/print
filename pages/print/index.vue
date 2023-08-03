@@ -39,52 +39,70 @@
 						{{item.head_name}}
 					</view>
 				</block>
-				<view class="bd flex align-center justify-between" v-if="item.head_style == '27'">
-					{{src_material_type_id=='0'?'未选择':judgeWay()}}
-					<view class="toSel" @click="jumpToWay">
-						选择
+				<!-- 不可编辑字段 -->
+				<block v-if="item.comm_set_json.pos_isedit!=undefined && item.comm_set_json.pos_isedit=='1'">
+					<view class="bd">
+						{{item.default_value}}
 					</view>
-				</view>
-				<!-- 显示虚拟键盘 -->
-				<view class="bd" v-else-if="item.comm_set_json.pda_digit_edit && item.comm_set_json.pda_digit_edit=='1'"
-					@click="openKey(item,index)">
-					{{item.default_value}}
-				</view>
-				<view class="bd"
-					v-else-if="item.head_style == '0' && (item.head_input_set == '20' || item.head_input_set == '21')">
-					<block v-if="item.head_input_setjson.length>3">
-						<picker @change="onchange($event,item)" mode='selector' :value="item.show_index"
-							:range="item.head_input_setjson" range-key="name">
-							<view class="uni-input">
-								{{item.head_input_setjson[item.show_index].label}}
-							</view>
-						</picker>
-						<!-- {{item.head_input_setjson}} -->
-					</block>
-					<block v-else>
-						<view class="flex align-center">
-							<view class="eachItem" :class="i.value==item.default_value?'check':''"
-								v-for="(i,index) in item.head_input_setjson" :key="index" @click="selectWay(item,i)">
-								<i class="iconfont iconchenggong" v-show="i.value==item.default_value"></i>
-								{{i.label}}
-							</view>
+				</block>
+				<!-- 可编辑字段 -->
+				<block v-else>
+					<!-- 选择加工类型 -->
+					<view class="bd flex align-center justify-between" v-if="item.head_style == '27'">
+						{{src_material_type_id=='0'?'未选择':judgeWay()}}
+						<view class="toSel" @click="jumpToWay">
+							选择
 						</view>
-					</block>
-				</view>
-				<view class="bd"
-					v-else-if="item.head_style == '0' && (item.head_input_set == '1' || item.head_input_set == '2')">
-					<!-- 整数或小数点 -->
-					<input type="number" v-model="item.default_value"
-						v-if="item.head_input_save == '1' || item.head_input_save == '2'" @focus="focusFun(item)">
-					<input type="text" v-model="item.default_value" @focus="focusFun(item)" v-else>
-				</view>
-				<view class="bd"
-					v-else-if="item.head_style == '0' && (item.head_input_set == '30' || item.head_input_set == '31')">
-					<uni-datetime-picker type="date" v-model="item.default_value" />
-				</view>
-				<view class="bd" v-else>
-					该字段暂时无法编辑
-				</view>
+					</view>
+					<!-- 选择设备类型 -->
+					<view class="bd flex align-center justify-between" v-else-if="item.head_style == '17'">
+						{{ass_equipment_id=='0'?'未选择':judgeDev()}}
+						<view class="toSel" @click="jumpToDev">
+							选择
+						</view>
+					</view>
+					<!-- 显示虚拟键盘 -->
+					<view class="bd"
+						v-else-if="item.comm_set_json.pda_digit_edit && item.comm_set_json.pda_digit_edit=='1'"
+						@click="openKey(item,index)">
+						{{item.default_value}}
+					</view>
+					<view class="bd"
+						v-else-if="item.head_style == '0' && (item.head_input_set == '20' || item.head_input_set == '21')">
+						<block v-if="item.head_input_setjson.length>3">
+							<picker @change="onchange($event,item)" mode='selector' :value="item.show_index"
+								:range="item.head_input_setjson" range-key="name">
+								<view class="uni-input">
+									{{item.head_input_setjson[item.show_index].label}}
+								</view>
+							</picker>
+						</block>
+						<block v-else>
+							<view class="flex align-center">
+								<view class="eachItem" :class="i.value==item.default_value?'check':''"
+									v-for="(i,index) in item.head_input_setjson" :key="index"
+									@click="selectWay(item,i)">
+									<i class="iconfont iconchenggong" v-show="i.value==item.default_value"></i>
+									{{i.label}}
+								</view>
+							</view>
+						</block>
+					</view>
+					<view class="bd"
+						v-else-if="item.head_style == '0' && (item.head_input_set == '1' || item.head_input_set == '2')">
+						<!-- 整数或小数点 -->
+						<input type="number" v-model="item.default_value"
+							v-if="item.head_input_save == '1' || item.head_input_save == '2'" @focus="focusFun(item)">
+						<input type="text" v-model="item.default_value" @focus="focusFun(item)" v-else>
+					</view>
+					<view class="bd"
+						v-else-if="item.head_style == '0' && (item.head_input_set == '30' || item.head_input_set == '31')">
+						<uni-datetime-picker type="date" v-model="item.default_value" />
+					</view>
+					<view class="bd" v-else>
+						该字段暂时无法编辑
+					</view>
+				</block>
 			</view>
 		</view>
 		<view class="edit flex">
@@ -148,6 +166,8 @@
 				config_table_id: '',
 				// 加工类型
 				src_material_type_id: '',
+				// 设备类型
+				ass_equipment_id: '',
 				tb_auto_id: '',
 				order_id: '',
 				// 历史记录传过来的值
@@ -214,9 +234,14 @@
 					// 回显选中的客户
 					this.info_userout_company_id = res.data.data.dataInfo[0].order_info.userout_a_id
 					for (let i of res.data.data.tableHeadList) {
-						// 回显加工类型
 						if (i.head_style == '27') {
+							// 回显加工类型
 							this.src_material_type_id = res.data.data.dataInfo[0]['th_' + i
+								.config_table_head_id
+							]
+						} else if (i.head_style == '17') {
+							// 回显设备类型
+							this.ass_equipment_id = res.data.data.dataInfo[0]['th_' + i
 								.config_table_head_id
 							]
 						}
@@ -267,6 +292,8 @@
 					for (let i of this.formList) {
 						if (i.head_style == '27') {
 							this.src_material_type_id = i.default_value
+						} else if (i.head_style == '17') {
+							this.ass_equipment_id = i.default_value
 						}
 					}
 				}
@@ -283,6 +310,11 @@
 			jumpToWay() {
 				uni.navigateTo({
 					url: `../seltype/index?srcTypeId=${this.src_material_type_id}`,
+				})
+			},
+			jumpToDev() {
+				uni.navigateTo({
+					url: `../selDev/index?srcDevId=${this.ass_equipment_id}`,
 				})
 			},
 			onchange(e, item) {
@@ -309,6 +341,13 @@
 						if (j.src_material_type_id === this.src_material_type_id) {
 							return j.type_name
 						}
+					}
+				}
+			},
+			judgeDev() {
+				for (let i of this.baseInfo.equipmentList) {
+					if (i.ass_equipment_id === this.ass_equipment_id) {
+						return i.equipment_name
 					}
 				}
 			},
@@ -389,6 +428,8 @@
 					} else {
 						if (this.formList[i].head_style == '27') {
 							list['th_' + this.formList[i].config_table_head_id] = this.src_material_type_id
+						} else if (this.formList[i].head_style == '17') {
+							list['th_' + this.formList[i].config_table_head_id] = this.ass_equipment_id
 						} else if (this.formList[i].head_style == '0' && (this.formList[i].head_input_set == '20' || this
 								.formList[i].head_input_set == '21')) {
 							// 可选字段需配置head_input_setjson中对象的value值传给后端
@@ -472,9 +513,14 @@
 						// 回显选中的客户
 						this.info_userout_company_id = res.data.data.dataInfo[0].order_info.userout_a_id
 						for (let i of res.data.data.tableHeadList) {
-							// 回显加工类型
 							if (i.head_style == '27') {
+								// 回显加工类型
 								this.src_material_type_id = res.data.data.dataInfo[0]['th_' + i
+									.config_table_head_id
+								]
+							} else if (i.head_style == '17') {
+								// 回显设备类型
+								this.ass_equipment_id = res.data.data.dataInfo[0]['th_' + i
 									.config_table_head_id
 								]
 							}

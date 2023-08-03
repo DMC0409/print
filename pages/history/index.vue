@@ -255,7 +255,8 @@
 						loginsession_main: this.userInfo.logincodewx,
 						config_table_id: this.config_table_id,
 						userout_a_id: this.userout_a_id,
-						page_name: this.page
+						page_name: this.page,
+						setEveryPageNum: 20
 					}
 				}).then(res => {
 						const {
@@ -264,7 +265,8 @@
 						// 处理分页数据
 						this.pageSize = res.data.data.dataInfo.list
 							.everyPageContentNum
-						this.total = Math.ceil(res.data.data.dataInfo.list.row / this.pageSize)
+						// 一共有多少条记录
+						this.total = res.data.data.dataInfo.list.row
 						const {
 							tableHeadList
 						} = res.data.data

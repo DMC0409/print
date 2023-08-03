@@ -77,6 +77,22 @@
 				}
 			}
 		},
+		// 选择设备
+		{
+			"path": "pages/selDev/index",
+			"name": "selDev",
+			"style": {
+				"navigationBarTextStyle": "black",
+				"navigationBarBackgroundColor": "transparent",
+				"backgroundColor": "#000",
+				"app-plus": {
+					"titleNView": {
+						"type": "float",
+						"titleText": "选择设备"
+					}
+				}
+			}
+		},
 		// 选择加工类型
 		{
 			"path": "pages/seltype/index",

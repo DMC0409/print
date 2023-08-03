@@ -11,9 +11,9 @@
 			</view>
 			<view class="userList">
 				<view class="eachUser flex align-center justify-between" @click="selUser(item)"
-					v-for="(item,index) in userList" :key="item.info_userout_company_id">
-					{{item.short_name}}
-					<i v-if="selectedID === item.info_userout_company_id" class="iconfont iconchenggong"></i>
+					v-for="(item,index) in userList" :key="item.ass_equipment_id">
+					{{item.equipment_name}}
+					<i v-if="selectedID === item.ass_equipment_id" class="iconfont iconchenggong"></i>
 				</view>
 			</view>
 		</view>
@@ -31,10 +31,10 @@
 			}
 		},
 		onLoad(options) {
-			this.selectedID = options.companyId
+			this.selectedID = options.srcDevId
 		},
 		mounted() {
-			this.userList = this.baseInfo.buyerList
+			this.userList = this.baseInfo.equipmentList
 		},
 		watch: {
 			keyword(newVal, oldVal) {
@@ -45,10 +45,10 @@
 			search() {
 				this.userList = []
 				if (this.keyword === '') {
-					this.userList = this.baseInfo.buyerList
+					this.userList = this.baseInfo.equipmentList
 				} else {
-					for (let i of this.baseInfo.buyerList) {
-						if (i.short_name.indexOf(this.keyword) != -1) {
+					for (let i of this.baseInfo.equipmentList) {
+						if (i.equipment_name.indexOf(this.keyword) != -1) {
 							this.userList.push(i)
 						}
 					}
@@ -56,20 +56,20 @@
 			},
 			selUser(item) {
 				let index = -1;
-				for (let i in this.baseInfo.buyerList) {
-					if (this.baseInfo.buyerList[i].info_userout_company_id == item.info_userout_company_id) {
+				for (let i in this.baseInfo.equipmentList) {
+					if (this.baseInfo.equipmentList[i].ass_equipment_id == item.ass_equipment_id) {
 						index = Number(i)
 					}
 				}
 				// 删除选中项置顶
-				let deleteItem = this.baseInfo.buyerList.splice(index, 1)
+				let deleteItem = this.baseInfo.equipmentList.splice(index, 1)
 				// 可选企业数组前增加删除的元素
-				this.baseInfo.buyerList.unshift(deleteItem[0])
+				this.baseInfo.equipmentList.unshift(deleteItem[0])
 				// 按升序重新排序企业数组
-				for (let i in this.baseInfo.buyerList) {
-					this.baseInfo.buyerList[i].sortNum = Number(i)
+				for (let i in this.baseInfo.equipmentList) {
+					this.baseInfo.equipmentList[i].sortNum = Number(i)
 				}
-				this.baseInfo.buyerList = this.baseInfo.buyerList.sort((a, b) => {
+				this.baseInfo.equipmentList = this.baseInfo.equipmentList.sort((a, b) => {
 					return a.sortNum - b.sortNum
 				})
 				// 更新缓存数据
@@ -77,7 +77,7 @@
 				// 向上个页面传参
 				let pages = getCurrentPages();
 				let prevPage = pages[pages.length - 2];
-				prevPage.$vm.info_userout_company_id = item.info_userout_company_id;
+				prevPage.$vm.ass_equipment_id = item.ass_equipment_id;
 				uni.navigateBack({
 					delta: 1
 				})
