@@ -15,7 +15,7 @@
 			</scroll-view>
 			<view class="content" v-if="showType.length!=0">
 				<block v-if="showType[current].child.length!=0">
-					<view class="eachLine flex align-center justify-between" @click="selWay(item,index)"
+					<view class="eachLine flex align-center justify-between" @click="selWay(item)"
 						v-for="(item,index) in showType[current].child" :key="index">
 						{{item.type_name}}
 						<i v-if="srcTypeId === item.src_material_type_id" class="iconfont iconchenggong"></i>
@@ -86,7 +86,13 @@
 					this.current = e.currentIndex;
 				}
 			},
-			selWay(item, index) {
+			selWay(item) {
+				let index = -1;
+				for (let i in this.baseInfo.typeList[this.current].child) {
+					if (this.baseInfo.typeList[this.current].child[i].src_material_type_id == item.src_material_type_id) {
+						index = Number(i)
+					}
+				}
 				// 删除选中项置顶
 				let deleteItem = this.baseInfo.typeList[this.current].child.splice(index, 1)
 				// 可选企业数组前增加删除的元素
