@@ -139,13 +139,6 @@
 				loginUserInfo: uni.getStorageSync('loginUserInfo'),
 				loginSystemInfo: uni.getStorageSync('loginSystemInfo'),
 				orderList: [],
-				// orderList: [{
-				// 	showInfo: {
-				// 		title: "123",
-				// 		desc: 'sdf',
-				// 		more: 'jnonn'
-				// 	}
-				// }],
 				config_table_id: '',
 				baseInfo: uni.getStorageSync('baseInfo'),
 				// 企业号
@@ -208,7 +201,7 @@
 				.then((res) => {
 					this.linkBaseData = res.data.data
 					uni.setNavigationBarTitle({
-						title: this.linkBaseData.linkInfo.form_table_name
+						title: `${this.linkBaseData.linkInfo.form_table_name}(${uni.getStorageSync('paperType')==0?'不干胶':'热敏纸'})`
 					})
 				}, () => {})
 		},

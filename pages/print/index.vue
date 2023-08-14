@@ -129,10 +129,10 @@
 		<uni-popup ref="saveMod" type="top">
 			<view class="saveOut">
 				<view class="eachOper" @click="onlySave(true)">
-					仅保存内容
+					{{orderInfo?'仅保存内容':'仅创建内容'}}
 				</view>
-				<view class="eachOper" @click="onlySave(false)">
-					保存并打印
+				<view class="eachOper printCss" @click="onlySave(false)">
+					{{orderInfo?'保存并打印':'创建并打印'}}
 				</view>
 				<view class="eachOper" @click="cancelSave">
 					取消
@@ -191,12 +191,16 @@
 			}
 			if (options.listInfo) {
 				uni.setNavigationBarTitle({
-					title: '修改订单'
+					title: `修改订单(${uni.getStorageSync('paperType')==0?'不干胶':'热敏纸'})`
 				})
 				this.orderInfo = JSON.parse(options.listInfo)
 				this.config_table_id = this.orderInfo.config_table_id
 				this.tb_auto_id = this.orderInfo.tb_auto_id
 				this.order_id = this.orderInfo.order_id
+			} else {
+				uni.setNavigationBarTitle({
+					title: `创建订单(${uni.getStorageSync('paperType')==0?'不干胶':'热敏纸'})`
+				})
 			}
 			let _this = this
 			// 添加打印状态监听
@@ -460,12 +464,11 @@
 						'YYYY-MM-DD')
 					this.resOrderInfo.timen_end = this.$moment(this.timen_end).format('YYYY-MM-DD')
 					this.kyle_data.order_info = this.resOrderInfo
-					this.$refs.saveMod.open('bottom')
 				} else {
 					// 创建订单
 					this.kyle_data.order_info.timen_end = this.timen_end;
-					this.onlySave(false)
 				}
+				this.$refs.saveMod.open('bottom')
 			},
 			onlySave(state) {
 				// 保存订单
@@ -481,8 +484,6 @@
 						kyle_data: JSON.stringify(this.kyle_data)
 					}
 				}).then(res => {
-					// 转换底部按钮显示状态
-					this.orderInfo = {}
 					// 赋值基础参数
 					this.tb_auto_id = res.data.data.dataInfo[0].tb_auto_id
 					this.config_table_id = res.data.data.dataInfo[0].config_table_id
@@ -554,7 +555,7 @@
 						this.formList = res.data.data.tableHeadList
 						// 修改头部导航提示信息
 						uni.setNavigationBarTitle({
-							title: '修改订单'
+							title: `修改订单(${uni.getStorageSync('paperType')==0?'不干胶':'热敏纸'})`
 						})
 						if (!state) {
 							// 读取打印数据进行打印
@@ -562,13 +563,15 @@
 						} else {
 							this.UPDATE_TIPMODAL({
 								isShow: true,
-								tipText: '保存成功', // 提示信息
+								tipText: this.orderInfo ? '保存成功' : '创建成功', // 提示信息
 								tipIcon: 'iconchenggong', // 图标名称
 								mark: true, // 是否有蒙版
 								duration: 2000, // 持续时间
 								mode: 'self' // 弹窗模式
 							})
 						}
+						// 转换底部按钮显示状态
+						this.orderInfo = {}
 					})
 				}, (err) => {
 					this.cancelSave()
@@ -718,6 +721,10 @@
 					border-bottom: none;
 					border-top: 20rpx solid #e2e2e2;
 				}
+			}
+
+			.printCss {
+				color: #4683f0;
 			}
 		}
 

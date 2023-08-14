@@ -56,7 +56,7 @@
 				"app-plus": {
 					"titleNView": {
 						"type": "float",
-						"titleText": "创建订单"
+						"titleText": ""
 					}
 				}
 			}
@@ -169,7 +169,7 @@
 				"app-plus": {
 					"titleNView": {
 						"type": "float",
-						"titleText": "历史记录"
+						"titleText": ""
 					}
 				}
 			}

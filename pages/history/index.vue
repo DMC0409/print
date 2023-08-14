@@ -87,6 +87,9 @@
 			});
 		},
 		onShow() {
+			uni.setNavigationBarTitle({
+				title: `历史记录(${uni.getStorageSync('paperType')==0?'不干胶':'热敏纸'})`
+			})
 			if (uni.getStorageSync('updateInfo')) {
 				let updateInfo = uni.getStorageSync('updateInfo')
 				//处理一下表单表头数据

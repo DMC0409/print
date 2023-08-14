@@ -132,8 +132,9 @@
 			]
 			this.orderDetail = this.$devliveryUtils.showFormTableDataProcessingFun(this.allHead, this.source
 				.formHeadCenterList, this.source.mainInfo)
+
 			uni.setNavigationBarTitle({
-				title: 'No.:' + this.source.mainInfo.form_table_index
+				title: `No.:${this.source.mainInfo.form_table_index}(${uni.getStorageSync('paperType')==0?'不干胶':'热敏纸'})`
 			})
 		},
 		mounted() {

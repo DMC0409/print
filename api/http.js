@@ -5,6 +5,8 @@ export const myRequest = (options) => {
 	return new Promise((resolve, reject) => {
 		// 统一添加访问标识
 		options.data.isWeChat = '1'
+		// 添加指定参数
+		options.data.isPdaPrintDevice = '1'
 		console.log('send data:', options.data)
 		// 检查版本信息时不显示loading
 		if (options.data.need_type != 'getSopVersionFun') {

@@ -1,5 +1,7 @@
 <template>
 	<view class="pageOut">
+		<!-- 自定义提示框 -->
+		<tipModal></tipModal>
 		<!-- 调试按钮 -->
 		<adjust></adjust>
 		<view class="userOut">
@@ -34,6 +36,17 @@
 						</view>
 					</view>
 				</view>
+				<view class="eachLine flex align-center">
+					<view class="title">更新系统</view>
+					<view class="flex align-center">
+						<view class="eachItem check" @click="checkVersion()">
+							点击更新
+						</view>
+					</view>
+				</view>
+			</view>
+			<view class="edit flex">
+				<button class="save" @click="submitSave">保存设置</button>
 			</view>
 		</view>
 	</view>
@@ -46,6 +59,9 @@
 	export default {
 		data() {
 			return {
+				userInfo: uni.getStorageSync('userInfo'),
+				loginUserInfo: uni.getStorageSync('loginUserInfo'),
+				loginSystemInfo: uni.getStorageSync('loginSystemInfo'),
 				paperArr: [{
 						name: '不干胶',
 						type: 0
@@ -82,20 +98,119 @@
 
 		},
 		methods: {
-			...mapMutations(['UPADTE_PRINTER']),
+			...mapMutations(['UPADTE_PRINTER', 'UPDATE_TIPMODAL']),
 			selectWay(item) {
 				this.selectedTpye = item.type
-				uni.setStorageSync('paperType', item.type)
-				this.UPADTE_PRINTER(null)
 			},
 			selectTime(item) {
 				this.delayTime = item.type
-				uni.setStorageSync('delayTime', item.type)
 			},
 			selectPage(item) {
 				this.eachPage = item.type
-				uni.setStorageSync('eachPage', item.type)
-			}
+			},
+			submitSave() {
+				uni.setStorageSync('paperType', this.selectedTpye)
+				this.UPADTE_PRINTER(null)
+				uni.setStorageSync('delayTime', this.delayTime)
+				uni.setStorageSync('eachPage', this.eachPage)
+				this.$api({
+						url: '/api/data.php',
+						method: 'post',
+						data: {
+							api_class: 'Open_padMobileDeviceClass',
+							need_type: 'setSysSettings',
+							mySysId: this.loginSystemInfo.database_name,
+							loginsession: this.loginUserInfo.logincodewx,
+							loginsession_main: this.userInfo.logincodewx,
+							settings_info: {
+								paperType: this.selectedTpye,
+								delayTime: this.delayTime,
+								eachPage: this.eachPage
+							}
+						}
+					})
+					.then((res) => {
+						this.UPDATE_TIPMODAL({
+							isShow: true,
+							tipText: '保存成功', // 提示信息
+							tipIcon: 'iconchenggong', // 图标名称
+							mark: true, // 是否有蒙版
+							duration: 2000, // 持续时间
+							mode: 'self' // 弹窗模式
+						})
+					}, () => {})
+			},
+			// 检查版本信息
+			checkVersion() {
+				this.$api({
+						url: '/api/data.php',
+						method: 'post',
+						data: {
+							api_class: 'Open_padMobileDeviceClass',
+							need_type: 'getPadVersionFun',
+							mySysId: this.loginSystemInfo.database_name,
+						}
+					}).then(res => {
+						console.log(res)
+						plus.runtime.getProperty(plus.runtime.appid, (appData) => {
+							console.log(appData)
+							// 版本不同则进行更新
+							let url = res.data.data.downloadLink
+							if (res.data.data.versionNum != appData.version) {
+								// 下载更新文件
+								uni.downloadFile({
+									url,
+									success: (res) => {
+										if (res.statusCode != 200) {
+											// 提示下载安装包失败
+											this.UPDATE_TIPMODAL({
+												isShow: true,
+												tipText: '下载安装包失败', // 提示信息
+												tipIcon: 'iconshibai', // 图标名称
+												mark: true, // 是否有蒙版
+												duration: 2000, // 持续时间
+												mode: 'self' // 弹窗模式
+											})
+											return
+										}
+										// 安装更新文件
+										plus.runtime.install(res.tempFilePath, {
+												force: true
+											},
+											() => {
+												uni.showModal({
+													title: '程序已更新是否重启',
+													success: (res) => {
+														if (res.confirm) {
+															plus.runtime.restart()
+														}
+													}
+												})
+											}, (err) => {
+												uni.showModal({
+													title: '更新失败',
+													content: err.message,
+													showCancel: false
+												})
+											})
+									}
+								})
+							} else {
+								this.UPDATE_TIPMODAL({
+									isShow: true,
+									tipText: '当前已是最新版本', // 提示信息
+									tipIcon: 'iconchenggong', // 图标名称
+									mark: true, // 是否有蒙版
+									duration: 2000, // 持续时间
+									mode: 'self' // 弹窗模式
+								})
+							}
+						})
+					})
+					.catch(err => {
+						console.log(err)
+					})
+			},
 		}
 	}
 </script>
@@ -112,6 +227,20 @@
 			position: absolute;
 			bottom: 0;
 			overflow: hidden;
+
+			.edit {
+				position: fixed;
+				left: 0;
+				right: 0;
+				bottom: 0;
+
+				button {
+					color: #fff;
+					width: 95%;
+					margin: 20rpx;
+					background-color: #4683f0;
+				}
+			}
 
 			.userList {
 				width: 100vw;
