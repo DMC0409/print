@@ -81,6 +81,7 @@
 
 		},
 		unmounted() {
+			// 页面卸载时清空计时器
 			if (this.tipTime) {
 				clearTimeout(this.tipTime)
 			}

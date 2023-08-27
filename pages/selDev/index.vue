@@ -31,9 +31,11 @@
 			}
 		},
 		onLoad(options) {
+			// 回显选中的设备
 			this.selectedID = options.srcDevId
 		},
 		mounted() {
+			// 缓存中获取设备列表数据
 			this.userList = this.baseInfo.equipmentList
 		},
 		watch: {
@@ -45,8 +47,10 @@
 			search() {
 				this.userList = []
 				if (this.keyword === '') {
+					// 关键词为空则显示所有可选设备数据
 					this.userList = this.baseInfo.equipmentList
 				} else {
+					// 轮询筛选与关键词匹配的设备
 					for (let i of this.baseInfo.equipmentList) {
 						if (i.equipment_name.indexOf(this.keyword) != -1) {
 							this.userList.push(i)
@@ -56,6 +60,7 @@
 			},
 			selUser(item) {
 				let index = -1;
+				// 获取选中设备的下标
 				for (let i in this.baseInfo.equipmentList) {
 					if (this.baseInfo.equipmentList[i].ass_equipment_id == item.ass_equipment_id) {
 						index = Number(i)
@@ -63,9 +68,9 @@
 				}
 				// 删除选中项置顶
 				let deleteItem = this.baseInfo.equipmentList.splice(index, 1)
-				// 可选企业数组前增加删除的元素
+				// 可选设备数组前增加删除的元素
 				this.baseInfo.equipmentList.unshift(deleteItem[0])
-				// 按升序重新排序企业数组
+				// 按升序重新排序设备数组
 				for (let i in this.baseInfo.equipmentList) {
 					this.baseInfo.equipmentList[i].sortNum = Number(i)
 				}
@@ -74,7 +79,7 @@
 				})
 				// 更新缓存数据
 				uni.setStorageSync('baseInfo', this.baseInfo)
-				// 向上个页面传参
+				// 向上个页面传递选中的设备id
 				let pages = getCurrentPages();
 				let prevPage = pages[pages.length - 2];
 				prevPage.$vm.ass_equipment_id = item.ass_equipment_id;

@@ -31,9 +31,11 @@
 			}
 		},
 		onLoad(options) {
+			// 回显选中的企业id
 			this.selectedID = options.companyId
 		},
 		mounted() {
+			// 缓存中获取工企业列表数据
 			this.userList = this.baseInfo.buyerList
 		},
 		watch: {
@@ -45,8 +47,10 @@
 			search() {
 				this.userList = []
 				if (this.keyword === '') {
+					// 关键词为空则显示所有可选企业数据
 					this.userList = this.baseInfo.buyerList
 				} else {
+					// 轮询筛选与关键词匹配的企业
 					for (let i of this.baseInfo.buyerList) {
 						if (i.short_name.indexOf(this.keyword) != -1) {
 							this.userList.push(i)
@@ -56,6 +60,7 @@
 			},
 			selUser(item) {
 				let index = -1;
+				// 获取选中企业的下标
 				for (let i in this.baseInfo.buyerList) {
 					if (this.baseInfo.buyerList[i].info_userout_company_id == item.info_userout_company_id) {
 						index = Number(i)

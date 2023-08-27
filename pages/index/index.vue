@@ -127,15 +127,15 @@
 			// 	}
 			// });
 			// #endif
-			// 初始化纸张类型
+			// 初始化纸张类型为不干胶
 			if (!uni.getStorageSync('paperType')) {
 				uni.setStorageSync('paperType', 0)
 			}
-			// 初始化延时时间
+			// 初始化延时时间为15秒
 			if (!uni.getStorageSync('delayTime')) {
 				uni.setStorageSync('delayTime', 15000)
 			}
-			// 初始化打印单据条数
+			// 初始化打印单据条数为4条换页
 			if (!uni.getStorageSync('eachPage')) {
 				uni.setStorageSync('eachPage', 4)
 			}

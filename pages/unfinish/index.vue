@@ -46,11 +46,13 @@
 			if (this.timeArr.length == 0) {
 				this.getTimeList()
 			} else {
-				if (this.$moment().unix() > this.timeArr[0].timeBegin + 60 * 60 * 24 * 1000) {
+				// 当打开app时的时间戳大于每日时间戳+24小时
+				if (this.$moment().unix() > this.timeArr[0].timeBegin + 60 * 60 * 24) {
 					this.getTimeList()
 				}
 			}
 		},
+		// 下拉更新时间戳
 		onPullDownRefresh() {
 			this.getTimeList('refresh')
 		},

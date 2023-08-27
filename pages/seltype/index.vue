@@ -45,6 +45,7 @@
 			}
 		},
 		onLoad(options) {
+			// 获取选中的工具id
 			this.srcTypeId = options.srcTypeId
 		},
 		watch: {
@@ -53,26 +54,32 @@
 			}
 		},
 		mounted() {
+			// 缓存中获取工序列表数据
 			this.contentArr = this.baseInfo.typeList
 			// 构建可选工序父级菜单
 			for (let i in this.contentArr) {
 				if (this.contentArr[i].main_src_material_type_id == '0') {
+					// 获取选中的父级菜单下可选子级数据
 					this.wayArr.push(this.contentArr[i].type_name)
 				}
 				for (let j of this.contentArr[i].child) {
+					// 回显选中的工序
 					if (j.src_material_type_id == this.srcTypeId) {
 						this.current = Number(i)
 					}
 				}
 			}
+			// 深度拷贝工序列表数据，供筛选使用
 			this.showType = JSON.parse(JSON.stringify((this.contentArr)))
 		},
 		methods: {
 			search() {
 				this.showType = []
 				for (let i in this.contentArr) {
+					// 深度拷贝当前可选子级工序数据
 					let eachKind = JSON.parse(JSON.stringify((this.contentArr[i])))
 					eachKind.child = []
+					// 轮询筛选与关键词匹配的工序
 					for (let j of this.contentArr[i].child) {
 						if (j.type_name.indexOf(this.keyword) != -1) {
 							eachKind.child.push(j)
@@ -88,6 +95,7 @@
 			},
 			selWay(item) {
 				let index = -1;
+				// 获取选中工序的下标
 				for (let i in this.baseInfo.typeList[this.current].child) {
 					if (this.baseInfo.typeList[this.current].child[i].src_material_type_id == item.src_material_type_id) {
 						index = Number(i)
